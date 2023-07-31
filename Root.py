@@ -31,14 +31,14 @@ class Root(customtkinter.CTk):
         self.main_frame = MainFrame(self, "linea_DDA")
         self.plot(self.main_frame.frame_chart)
 
-    def linea_bresenham(self):
-        self.main_frame.destroy()
-        self.main_frame = MainFrame(self, "linea_bresenham")
-        self.plot(self.main_frame.frame_chart)
-
     def linea_DDA(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "linea_DDA")
+        self.plot(self.main_frame.frame_chart)
+
+    def linea_bresenham(self):
+        self.main_frame.destroy()
+        self.main_frame = MainFrame(self, "linea_bresenham")
         self.plot(self.main_frame.frame_chart)
 
     def circulo_DDA(self):
@@ -61,48 +61,20 @@ class Root(customtkinter.CTk):
         self.main_frame = MainFrame(self, "parabola")
         self.plot(self.main_frame.frame_chart)
 
-    def plot(self, frame):
+    def plot(self, frame, coordinates = [(96,96)]):
         self.update()
         chart_height= frame.winfo_height()
         fig = Figure(figsize = (chart_height/100, chart_height/100), dpi = 100)
         fig.set_facecolor('#333')
         
-        y = [i**2 for i in range(101)]
         plot1 = fig.add_subplot(111)
         plot1.set_facecolor("#212121")
         plot1.tick_params(axis='both', colors='white')
-        plot1.plot(y)
+        plot1.plot(*zip(*coordinates))
     
         canvas = FigureCanvasTkAgg(fig, master = frame)  
         canvas.draw()
-
         canvas.get_tk_widget().grid()
-        canvas.get_tk_widget().grid()
-        
-    def lineDDA(self, x0, y0, x1, y1):
-        points = []
-        dx = x1 - x0
-        dy = y1 - y0
-
-        if abs(dx) > abs(dy):
-            steps = abs(dx)
-        else:
-            steps = abs(dy)
-
-        Xinc = dx / steps
-        Yinc = dy / steps
-
-        X = x0
-        Y = y0
-
-        points.append((round(X), round(Y)))
-
-        for _ in range(steps):
-            X += Xinc
-            Y += Yinc
-            points.append((round(X), round(Y)))
-
-        return points
     
 class SideBarFrame(customtkinter.CTkFrame):
     def __init__(self, root: Root):
@@ -159,90 +131,114 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             titulo_inputs.grid(row=0, column=0, columnspan=4,  pady=20, sticky="EW")
 
             x0 = customtkinter.CTkEntry(self, placeholder_text="X0")
-            x0.grid(column=0, row=1, padx=(20,10), pady=(20,40), sticky="WE")
+            x0.grid(column=0, row=1, padx=(20,10), pady=(20,10), sticky="WE")
 
             y0 = customtkinter.CTkEntry(self, placeholder_text="Y0")
-            y0.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            y0.grid(column=1, row=1, padx=10, pady=(20,10), sticky="WE")
             
             x1 = customtkinter.CTkEntry(self, placeholder_text="X1")
-            x1.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+            x1.grid(column=2, row=1, padx=(10,20), pady=(20,10), sticky="WE")
 
             y1 = customtkinter.CTkEntry(self, placeholder_text="Y1")
-            y1.grid(column=3, row=1, padx=(10,20), pady=(20,40), sticky="WE")
+            y1.grid(column=3, row=1, padx=(10,20), pady=(20,10), sticky="WE")
+
+            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
 
         elif(algorithm == "linea_bresenham"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Linea por Bresenham", font=("helvetica", 20))
             titulo_inputs.grid(row=0, column=0, columnspan=4,  pady=20, sticky="EW")
 
             x0 = customtkinter.CTkEntry(self, placeholder_text="X0")
-            x0.grid(column=0, row=1, padx=(20,10), pady=(20,40), sticky="WE")
+            x0.grid(column=0, row=1, padx=(20,10), pady=(20,10), sticky="WE")
 
             y0 = customtkinter.CTkEntry(self, placeholder_text="Y0")
-            y0.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            y0.grid(column=1, row=1, padx=10, pady=(20,10), sticky="WE")
             
             x1 = customtkinter.CTkEntry(self, placeholder_text="X1")
-            x1.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+            x1.grid(column=2, row=1, padx=10, pady=(20,10), sticky="WE")
 
             y1 = customtkinter.CTkEntry(self, placeholder_text="Y1")
-            y1.grid(column=3, row=1, padx=(10,20), pady=(20,40), sticky="WE")
+            y1.grid(column=3, row=1, padx=(10,20), pady=(20,10), sticky="WE")
+
+            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
 
         elif(algorithm == "circulo_DDA"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Circulo por DDA", font=("helvetica", 20))
             titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
 
             radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
-            radio.grid(column=0, row=1, padx=20, pady=(20,40), sticky="WE")
+            radio.grid(column=0, row=1, padx=20, pady=(20,10), sticky="WE")
 
             Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
-            Xc.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            Xc.grid(column=1, row=1, padx=10, pady=(20,10), sticky="WE")
             
             Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
-            Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+            Yc.grid(column=2, row=1, padx=10, pady=(20,10), sticky="WE")
+
+            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            graph.grid(column=0, row=2, padx=15, pady=(10,25), columnspan=3, sticky="WE")
 
         elif(algorithm == "circulo_punto_medio"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Circulo por punto medio", font=("helvetica", 20))
             titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
 
             radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
-            radio.grid(column=0, row=1, padx=20, pady=(20,40), sticky="WE")
+            radio.grid(column=0, row=1, padx=20, pady=(20,10), sticky="WE")
 
             Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
-            Xc.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            Xc.grid(column=1, row=1, padx=10, pady=(20,10), sticky="WE")
             
             Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
-            Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+            Yc.grid(column=2, row=1, padx=10, pady=(20,10), sticky="WE")
+
+            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            graph.grid(column=0, row=2, padx=15, pady=(10,25), columnspan=3, sticky="WE")
 
         elif(algorithm == "elipse_punto_medio"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Elipse por punto medio", font=("helvetica", 20))
-            titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
+            titulo_inputs.grid(row=0, column=0, columnspan=4, pady=20, sticky="WE")
 
             Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
-            Xc.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            Xc.grid(column=0, row=1, padx=10, pady=(20,10), sticky="WE")
             
             Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
-            Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+            Yc.grid(column=1, row=1, padx=10, pady=(20,10), sticky="WE")
 
             Rx = customtkinter.CTkEntry(self, placeholder_text="Radio X")
-            Rx.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            Rx.grid(column=2, row=1, padx=10, pady=(20,10), sticky="WE")
             
             Ry = customtkinter.CTkEntry(self, placeholder_text="Radio Y")
-            Ry.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+            Ry.grid(column=3, row=1, padx=10, pady=(20,10), sticky="WE")
+
+            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
 
         elif(algorithm == "parabola"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Parabola", font=("helvetica", 20))
             titulo_inputs.grid(row=0, column=0, columnspan=4,  pady=20, sticky="EW")
 
             x0 = customtkinter.CTkEntry(self, placeholder_text="X0")
-            x0.grid(column=0, row=1, padx=(20,10), pady=(20,40), sticky="WE")
+            x0.grid(column=0, row=1, padx=(20,10), pady=(20,10), sticky="WE")
 
             y0 = customtkinter.CTkEntry(self, placeholder_text="Y0")
-            y0.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            y0.grid(column=1, row=1, padx=10, pady=(20,10), sticky="WE")
             
             x1 = customtkinter.CTkEntry(self, placeholder_text="X1")
-            x1.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+            x1.grid(column=2, row=1, padx=10, pady=(20,10), sticky="WE")
 
             y1 = customtkinter.CTkEntry(self, placeholder_text="Y1")
-            y1.grid(column=3, row=1, padx=(10,20), pady=(20,40), sticky="WE")
+            y1.grid(column=3, row=1, padx=(10,20), pady=(20,10), sticky="WE")
+
+            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
+            
+    def get_values():
+        x0= x1_entry.get()
+        y0= x1_entry.get()
+        x1= x1_entry.get()
+        y1= x1_entry.get()
 
 class Algorithm():
     def __init__(self, root):

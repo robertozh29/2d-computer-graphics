@@ -60,6 +60,7 @@ def lineBresenham(x0, y0, x1, y1):
             err += dx
             y0 += sy
 
+    print(points)
     return points
 
 # Función para dibujar un círculo usando el algoritmo DDA
