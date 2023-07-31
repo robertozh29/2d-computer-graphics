@@ -4,7 +4,7 @@ import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 # Modules
-from prueba import SideBarFrame
+from sidebar_module import SideBarFrame
 
 matplotlib.rc('font', size=14)
 customtkinter.set_appearance_mode("dark")
