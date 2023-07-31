@@ -29,50 +29,34 @@ class Root(customtkinter.CTk):
         
         # ----- main_frame -----
         self.main_frame = MainFrame(self, "linea_DDA")
-
-        self.frame_chart = customtkinter.CTkFrame(self.main_frame, width=300, height=300)
-        self.frame_chart.grid(column=0, row=1, sticky="NSEW", padx=2, pady=2)
-
-        self.frame_logs = customtkinter.CTkFrame(self.main_frame, width=300, height=300)
-        self.frame_logs.grid(column=1, row=1, sticky="NSEW", padx=2, pady=2)
-
-        self.plot()
+        self.plot(self.main_frame.frame_chart)
 
     def linea_bresenham(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "linea_bresenham")
+        self.plot(self.main_frame.frame_chart)
 
     def linea_DDA(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "linea_DDA")
+        self.plot(self.main_frame.frame_chart)
 
-    def plot(self):
+    def plot(self, frame):
         self.update()
-        chart_height= self.frame_chart.winfo_height()
-        # the figure that will contain the plot
+        chart_height= frame.winfo_height()
         fig = Figure(figsize = (chart_height/100, chart_height/100), dpi = 100)
         fig.set_facecolor('#333')
         
-        # list of squares
         y = [i**2 for i in range(101)]
-    
-        # adding the subplot
         plot1 = fig.add_subplot(111)
-    
-        # plotting the graph
         plot1.set_facecolor("#212121")
         plot1.tick_params(axis='both', colors='white')
         plot1.plot(y)
     
-        # creating the Tkinter canvas
-        # containing the Matplotlib figure
-        canvas = FigureCanvasTkAgg(fig, master = self.frame_chart)  
+        canvas = FigureCanvasTkAgg(fig, master = frame)  
         canvas.draw()
-    
-        # placing the canvas on the Tkinter window
+
         canvas.get_tk_widget().grid()
-    
-        # placing the toolbar on the Tkinter window
         canvas.get_tk_widget().grid()
         
     def lineDDA(self, x0, y0, x1, y1):
@@ -128,7 +112,6 @@ class SideBarFrame(customtkinter.CTkFrame):
         self.button7.grid(column=0, row=7, padx=30, pady=(7,25), ipadx=52, sticky="S")
         self.rowconfigure(7, weight=1)
 
-
 class MainFrame(customtkinter.CTkFrame):
     def __init__(self, root, algorithm):
         super().__init__(root)
@@ -139,7 +122,11 @@ class MainFrame(customtkinter.CTkFrame):
         algorithm_frame = AlgorithmFrame(self, algorithm)
         algorithm_frame.grid(column=0, row=0, columnspan=2, sticky="NSEW", padx=2, pady=2)
         
+        self.frame_chart = customtkinter.CTkFrame(self, width=300, height=300)
+        self.frame_chart.grid(column=0, row=1, sticky="NSEW", padx=2, pady=2)
 
+        self.frame_logs = customtkinter.CTkFrame(self, width=300, height=300)
+        self.frame_logs.grid(column=1, row=1, sticky="NSEW", padx=2, pady=2)
 
 class AlgorithmFrame(customtkinter.CTkFrame):
     def __init__(self, root, algorithm):
@@ -179,6 +166,18 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             y1 = customtkinter.CTkEntry(self, placeholder_text="Y1")
             y1.grid(column=3, row=1, padx=(10,20), pady=(20,40), sticky="WE")
 
+        elif(algorithm == "circulo_DDA"):
+            titulo_inputs = customtkinter.CTkLabel(self, text="Circulo por DDA", font=("helvetica", 20))
+            titulo_inputs.grid(row=0, column=0, columnspan=4,  pady=20, sticky="EW")
+
+            radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
+            radio.grid(column=0, row=1, padx=(20,10), pady=(20,40), sticky="WE")
+
+            Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
+            Xc.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            
+            Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
+            Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
 
 
 ventana = Root()
