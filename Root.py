@@ -3,6 +3,8 @@ import customtkinter
 import matplotlib
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+# Modules
+from prueba import SideBarFrame
 
 matplotlib.rc('font', size=14)
 customtkinter.set_appearance_mode("dark")
@@ -29,53 +31,38 @@ class Root(customtkinter.CTk):
         
         # ----- main_frame -----
         self.main_frame = MainFrame(self, "linea_DDA")
-        self.plot(self.main_frame.frame_chart)
 
     def linea_DDA(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "linea_DDA")
-        self.plot(self.main_frame.frame_chart)
+        self.main_frame.plot()
 
     def linea_bresenham(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "linea_bresenham")
-        self.plot(self.main_frame.frame_chart)
+        self.main_frame.plot()
 
     def circulo_DDA(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "circulo_DDA")
-        self.plot(self.main_frame.frame_chart)
+        self.main_frame.plot()
 
     def circulo_punto_medio(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "circulo_punto_medio")
-        self.plot(self.main_frame.frame_chart)
+        self.main_frame.plot()
 
     def elipse_punto_medio(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "elipse_punto_medio")
-        self.plot(self.main_frame.frame_chart)
+        self.main_frame.plot()
     
     def parabola(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "parabola")
-        self.plot(self.main_frame.frame_chart)
+        self.main_frame.plot()
 
-    def plot(self, frame, coordinates = [(96,96)]):
-        self.update()
-        chart_height= frame.winfo_height()
-        fig = Figure(figsize = (chart_height/100, chart_height/100), dpi = 100)
-        fig.set_facecolor('#333')
-        
-        plot1 = fig.add_subplot(111)
-        plot1.set_facecolor("#212121")
-        plot1.tick_params(axis='both', colors='white')
-        plot1.plot(*zip(*coordinates))
-    
-        canvas = FigureCanvasTkAgg(fig, master = frame)  
-        canvas.draw()
-        canvas.get_tk_widget().grid()
-    
+"""
 class SideBarFrame(customtkinter.CTkFrame):
     def __init__(self, root: Root):
         super().__init__(root)
@@ -103,6 +90,7 @@ class SideBarFrame(customtkinter.CTkFrame):
         self.button7 = customtkinter.CTkButton(self, text="Clear all", command=root.destroy, fg_color="red", hover_color="#b20101")
         self.button7.grid(column=0, row=7, padx=30, pady=(7,25), ipadx=52, sticky="S")
         self.rowconfigure(7, weight=1)
+"""
 
 class MainFrame(customtkinter.CTkFrame):
     def __init__(self, root, algorithm):
@@ -119,10 +107,25 @@ class MainFrame(customtkinter.CTkFrame):
 
         self.frame_logs = customtkinter.CTkFrame(self, width=300, height=300)
         self.frame_logs.grid(column=1, row=1, sticky="NSEW", padx=2, pady=2)
+    
+    def plot(self, coordinates = [(96,96)]):
+        self.update()
+        chart_height= self.frame_chart.winfo_height()
+        fig = Figure(figsize = (chart_height/100, chart_height/100), dpi = 100)
+        fig.set_facecolor('#333')
+        
+        plot1 = fig.add_subplot(111)
+        plot1.set_facecolor("#212121")
+        plot1.tick_params(axis='both', colors='white')
+        plot1.plot(*zip(*coordinates))
+    
+        self.canvas = FigureCanvasTkAgg(fig, master = self.frame_chart)  
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid()
 
 class AlgorithmFrame(customtkinter.CTkFrame):
-    def __init__(self, root, algorithm):
-        super().__init__(root)
+    def __init__(self,parentFrame, algorithm):
+        super().__init__(parentFrame)
         
         self.grid_columnconfigure((0,1,2,3), weight=1)
 
@@ -142,7 +145,9 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             y1 = customtkinter.CTkEntry(self, placeholder_text="Y1")
             y1.grid(column=3, row=1, padx=(10,20), pady=(20,10), sticky="WE")
 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            entries = [x0,y0,x1,y1]    
+
+            graph = customtkinter.CTkButton(self, text="Graficar", command= lambda: self.get_values(parentFrame, entries))
             graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
 
         elif(algorithm == "linea_bresenham"):
@@ -234,17 +239,20 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
             graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
             
-    def get_values():
-        x0= x1_entry.get()
-        y0= x1_entry.get()
-        x1= x1_entry.get()
-        y1= x1_entry.get()
+    def get_values(self, parentFrame, entries):
+        algorithm = Algorithm()
+        e1 = [int(value.get()) for value in entries]
+        coordinates = algorithm.lineDDA(e1[0], e1[1], e1[2], e1[3])
+        
+        print(coordinates)
+        parentFrame.plot(coordinates)
+        
 
 class Algorithm():
-    def __init__(self, root):
-        super().__init__(root)
+    def __init__(self):
+        super().__init__()
     
-    def lineDDA(x0, y0, x1, y1):
+    def lineDDA(self, x0, y0, x1, y1):
         points = [] # Lista para almacenar los puntos de la línea
         dx = x1 - x0 # Diferencia en x
         dy = y1 - y0 # Diferencia en y
