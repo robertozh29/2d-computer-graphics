@@ -28,7 +28,7 @@ class Root(customtkinter.CTk):
         self.sidebar.grid(column=0, row=0, sticky="NS")
         
         # ----- main_frame -----
-        self.main_frame = MainFrame(self, "linea_DDA")
+        self.main_frame = MainFrame(self, "circulo_DDA")
         self.plot(self.main_frame.frame_chart)
 
     def linea_bresenham(self):
@@ -39,6 +39,16 @@ class Root(customtkinter.CTk):
     def linea_DDA(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "linea_DDA")
+        self.plot(self.main_frame.frame_chart)
+
+    def circulo_DDA(self):
+        self.main_frame.destroy()
+        self.main_frame = MainFrame(self, "circulo_DDA")
+        self.plot(self.main_frame.frame_chart)
+
+    def circulo_punto_medio(self):
+        self.main_frame.destroy()
+        self.main_frame = MainFrame(self, "circulo_punto_medio")
         self.plot(self.main_frame.frame_chart)
 
     def plot(self, frame):
@@ -96,10 +106,10 @@ class SideBarFrame(customtkinter.CTkFrame):
         self.button2 = customtkinter.CTkButton(self, text="Linea por Bresenham", command=root.linea_bresenham)
         self.button2.grid(column=0, row=2, padx=30, pady=7, ipadx=50)
 
-        self.button3 = customtkinter.CTkButton(self, text="Circulo por DDA", command=root.destroy)
+        self.button3 = customtkinter.CTkButton(self, text="Circulo por DDA", command=root.circulo_DDA)
         self.button3.grid(column=0, row=3, padx=30, pady=7, ipadx=50)
 
-        self.button4 = customtkinter.CTkButton(self, text="Circulo por punto medio", command=root.destroy)
+        self.button4 = customtkinter.CTkButton(self, text="Circulo por punto medio", command=root.circulo_punto_medio)
         self.button4.grid(column=0, row=4, padx=30, pady=7, ipadx=40)
 
         self.button5 = customtkinter.CTkButton(self, text="Elipse por punto medio", command=root.destroy)
@@ -168,16 +178,30 @@ class AlgorithmFrame(customtkinter.CTkFrame):
 
         elif(algorithm == "circulo_DDA"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Circulo por DDA", font=("helvetica", 20))
-            titulo_inputs.grid(row=0, column=0, columnspan=4,  pady=20, sticky="EW")
+            titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
 
             radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
-            radio.grid(column=0, row=1, padx=(20,10), pady=(20,40), sticky="WE")
+            radio.grid(column=0, row=1, padx=20, pady=(20,40), sticky="WE")
 
             Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
             Xc.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
             
             Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
             Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+
+        elif(algorithm == "punto_medio"):
+            titulo_inputs = customtkinter.CTkLabel(self, text="Circulo por punto medio", font=("helvetica", 20))
+            titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
+
+            radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
+            radio.grid(column=0, row=1, padx=20, pady=(20,40), sticky="WE")
+
+            Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
+            Xc.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            
+            Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
+            Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+
 
 
 ventana = Root()
