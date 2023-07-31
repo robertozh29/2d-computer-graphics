@@ -51,6 +51,11 @@ class Root(customtkinter.CTk):
         self.main_frame = MainFrame(self, "circulo_punto_medio")
         self.plot(self.main_frame.frame_chart)
 
+    def elipse_punto_medio(self):
+        self.main_frame.destroy()
+        self.main_frame = MainFrame(self, "elipse_punto_medio")
+        self.plot(self.main_frame.frame_chart)
+
     def plot(self, frame):
         self.update()
         chart_height= frame.winfo_height()
@@ -112,7 +117,7 @@ class SideBarFrame(customtkinter.CTkFrame):
         self.button4 = customtkinter.CTkButton(self, text="Circulo por punto medio", command=root.circulo_punto_medio)
         self.button4.grid(column=0, row=4, padx=30, pady=7, ipadx=40)
 
-        self.button5 = customtkinter.CTkButton(self, text="Elipse por punto medio", command=root.destroy)
+        self.button5 = customtkinter.CTkButton(self, text="Elipse por punto medio", command=root.elipse_punto_medio)
         self.button5.grid(column=0, row=5, padx=30, pady=7, ipadx=46)
 
         self.button6 = customtkinter.CTkButton(self, text="Parabola", command=root.destroy)
@@ -189,7 +194,7 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
             Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
 
-        elif(algorithm == "punto_medio"):
+        elif(algorithm == "ciruclo_punto_medio"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Circulo por punto medio", font=("helvetica", 20))
             titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
 
@@ -201,6 +206,22 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             
             Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
             Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+
+        elif(algorithm == "elipse_punto_medio"):
+            titulo_inputs = customtkinter.CTkLabel(self, text="Elipse por punto medio", font=("helvetica", 20))
+            titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
+
+            Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
+            Xc.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            
+            Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
+            Yc.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
+
+            Rx = customtkinter.CTkEntry(self, placeholder_text="Radio X")
+            Rx.grid(column=1, row=1, padx=10, pady=(20,40), sticky="WE")
+            
+            Ry = customtkinter.CTkEntry(self, placeholder_text="Radio Y")
+            Ry.grid(column=2, row=1, padx=10, pady=(20,40), sticky="WE")
 
 
 
