@@ -1,4 +1,5 @@
 2d-graphics.exe
+__pycache__/
 __pycache__/App.cpython-311.pyc
 __pycache__/Root.cpython-311.pyc
 __pycache__/prueba.cpython-311.pyc
