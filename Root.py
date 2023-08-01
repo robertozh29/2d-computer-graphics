@@ -23,13 +23,13 @@ class Root(customtkinter.CTk):
         self.config(bg=ROOT_BG)
         self.iconbitmap('D:/Github/2d-computer-graphics/media/grafico.ico')
 
+        # ----- main_frame -----
+        self.main_frame = MainFrame(self, "linea_DDA")
+
         # ----- side_bar -----
         self.sidebar = SideBarFrame(self)
         self.sidebar.grid(column=0, row=0, sticky="NS")
         
-        # ----- main_frame -----
-        self.main_frame = MainFrame(self, "linea_DDA")
-
     def linea_DDA(self):
         self.main_frame.destroy()
         self.main_frame = MainFrame(self, "linea_DDA")

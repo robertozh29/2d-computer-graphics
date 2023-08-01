@@ -48,6 +48,26 @@ class MainFrame(customtkinter.CTkFrame):
 
         self.plot1 = True
 
+    def plot_circle(self, coordinates = [(96,96)]):
+        self.figura.set_facecolor('#333')
+        self.axes .set_facecolor("#212121")
+        self.axes .tick_params(axis='both', colors='white')
+        self.canvas.get_tk_widget().grid()
+        self.axes.clear()
+        self.axes.plot(*zip(*coordinates),'o')
+        self.canvas.draw()
+
+        if self.plot1 and coordinates != [(96,96)]: 
+            for widget in self.frame_logs.winfo_children():
+                widget.destroy()
+            for idx,n in enumerate(coordinates):
+                log = f"{idx}: {n}" 
+                l = customtkinter.CTkLabel(self.frame_logs, text = log)
+                l.grid()   
+
+        self.plot1 = True
+
+
 class AlgorithmFrame(customtkinter.CTkFrame):
     def __init__(self, parentFrame, algorithm):
         super().__init__(parentFrame)
@@ -107,7 +127,7 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             radio.grid(column=0, row=1, padx=20, pady=(20,10), sticky="WE")
 
             entries = [Xc,Yc,radio] 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot_circle(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=15, pady=(10,25), columnspan=3, sticky="WE")
 
         elif(algorithm == "circulo_punto_medio"):
@@ -124,7 +144,7 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             radio.grid(column=0, row=1, padx=20, pady=(20,10), sticky="WE")
 
             entries = [Xc,Yc,radio] 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot_circle(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=15, pady=(10,25), columnspan=3, sticky="WE")
 
         elif(algorithm == "elipse_punto_medio"):
@@ -144,7 +164,7 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             Ry.grid(column=3, row=1, padx=10, pady=(20,10), sticky="WE")
 
             entries = [Xc,Yc, Rx, Ry] 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot_circle(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
 
         elif(algorithm == "parabola"):
@@ -164,7 +184,7 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             y1.grid(column=3, row=1, padx=(10,20), pady=(20,10), sticky="WE")
 
             entries = [x0,y0,x1,y1] 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot_circle(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
             
     def get_coordinates(self, opc, entries):
