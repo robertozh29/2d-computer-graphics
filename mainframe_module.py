@@ -18,9 +18,11 @@ class MainFrame(customtkinter.CTkFrame):
         
         self.frame_chart = customtkinter.CTkFrame(self)
         self.frame_chart.grid(column=0, row=1, sticky="NSEW", padx=2, pady=2)
+        
 
         self.frame_logs = customtkinter.CTkScrollableFrame(self, width=300, height=300)
         self.frame_logs.grid(column=1, row=1, sticky="NSEW", padx=2, pady=2)
+        self.frame_logs.grid_columnconfigure(0, weight=1)
 
         #incializando Widgets Grafica
         chart_height = self.winfo_screenheight()
@@ -38,11 +40,18 @@ class MainFrame(customtkinter.CTkFrame):
         self.axes.plot(*zip(*coordinates))
         self.canvas.draw()
 
+
         if self.plot1 and coordinates != [(96,96)]: 
             for widget in self.frame_logs.winfo_children():
                 widget.destroy()
+
+            l = customtkinter.CTkLabel(self.frame_logs, text = "|    X    |    Y    |")
+            l.grid() 
             for idx,n in enumerate(coordinates):
-                log = f"{idx}: {n}" 
+                if n[0] > 9 or n[1] > 9: 
+                    log = f"(   {n[0]}   ,   {n[1]}   )" 
+                else: 
+                    log = f"(    {n[0]}    ,    {n[1]}    )" 
                 l = customtkinter.CTkLabel(self.frame_logs, text = log)
                 l.grid()   
 
