@@ -11,7 +11,7 @@ class MainFrame(customtkinter.CTkFrame):
         self.grid(column=1, row=0, sticky="NSEW", padx=(15,0))
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure((0,1), weight=1)
-        self.plot1 = None
+        self.plot1 = False
 
         algorithm_frame = AlgorithmFrame(self, algorithm)
         algorithm_frame.grid(column=0, row=0, columnspan=2, sticky="NSEW", padx=2, pady=2)
@@ -19,16 +19,15 @@ class MainFrame(customtkinter.CTkFrame):
         self.frame_chart = customtkinter.CTkFrame(self)
         self.frame_chart.grid(column=0, row=1, sticky="NSEW", padx=2, pady=2)
 
+        self.frame_logs = customtkinter.CTkScrollableFrame(self, width=300, height=300)
+        self.frame_logs.grid(column=1, row=1, sticky="NSEW", padx=2, pady=2)
+
         #incializando Widgets Grafica
         chart_height = self.winfo_screenheight()
         self.figura = Figure(figsize = (chart_height/100 * 1.5, chart_height/100 * 1.5), dpi = 100)
         self.axes = self.figura.add_subplot(111)
         self.canvas = FigureCanvasTkAgg(self.figura, master=self.frame_chart)
-        self.plot()
-
-        # Frame para mostrar las coordenadas de las figuras
-        self.frame_logs = customtkinter.CTkFrame(self, width=300, height=300)
-        self.frame_logs.grid(column=1, row=1, sticky="NSEW", padx=2, pady=2)
+        self.plot()  
 
     def plot(self, coordinates = [(96,96)]):
         self.figura.set_facecolor('#333')
@@ -38,6 +37,16 @@ class MainFrame(customtkinter.CTkFrame):
         self.axes.clear()
         self.axes.plot(*zip(*coordinates))
         self.canvas.draw()
+
+        if self.plot1 and coordinates != [(96,96)]: 
+            for widget in self.frame_logs.winfo_children():
+                widget.destroy()
+            for idx,n in enumerate(coordinates):
+                log = f"{idx}: {n}" 
+                l = customtkinter.CTkLabel(self.frame_logs, text = log)
+                l.grid()   
+
+        self.plot1 = True
 
 class AlgorithmFrame(customtkinter.CTkFrame):
     def __init__(self, parentFrame, algorithm):
