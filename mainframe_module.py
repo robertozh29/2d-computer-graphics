@@ -19,14 +19,14 @@ class MainFrame(customtkinter.CTkFrame):
         self.frame_chart = customtkinter.CTkFrame(self)
         self.frame_chart.grid(column=0, row=1, sticky="NSEW", padx=2, pady=2)
         
-
         self.frame_logs = customtkinter.CTkScrollableFrame(self, width=300, height=300)
         self.frame_logs.grid(column=1, row=1, sticky="NSEW", padx=2, pady=2)
         self.frame_logs.grid_columnconfigure(0, weight=1)
 
         #incializando Widgets Grafica
-        chart_height = self.winfo_screenheight()
-        self.figura = Figure(figsize = (chart_height/100 * 1.5, chart_height/100 * 1.5), dpi = 100)
+        chart_width = self.winfo_screenwidth()
+        print(chart_width)
+        self.figura = Figure(figsize = (10, 10), dpi = 100)
         self.axes = self.figura.add_subplot(111)
         self.canvas = FigureCanvasTkAgg(self.figura, master=self.frame_chart)
         self.plot()  
@@ -35,7 +35,7 @@ class MainFrame(customtkinter.CTkFrame):
         self.figura.set_facecolor('#333')
         self.axes .set_facecolor("#212121")
         self.axes .tick_params(axis='both', colors='white')
-        self.canvas.get_tk_widget().grid()
+        self.canvas.get_tk_widget().pack()
         self.axes.clear()
         self.axes.plot(*zip(*coordinates))
         self.canvas.draw()
