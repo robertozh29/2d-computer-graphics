@@ -25,7 +25,7 @@ class SideBarFrame(customtkinter.CTkFrame):
         self.button6 = customtkinter.CTkButton(self, text="Parabola", command=root.parabola)
         self.button6.grid(column=0, row=6, padx=30, pady=7, ipadx=52)
 
-        self.button7 = customtkinter.CTkButton(self, text="Clear all", command=root.destroy, fg_color="red", hover_color="#b20101")
+        self.button7 = customtkinter.CTkButton(self, text="Salir", command=root.destroy, fg_color="red", hover_color="#b20101")
         self.button7.grid(column=0, row=7, padx=30, pady=(7,25), ipadx=52, sticky="S")
         self.rowconfigure(7, weight=1)
 
