@@ -42,12 +42,12 @@ class MainFrame(customtkinter.CTkFrame):
 class AlgorithmFrame(customtkinter.CTkFrame):
     def __init__(self, parentFrame, algorithm):
         super().__init__(parentFrame)
-
         self.grid_columnconfigure((0,1,2,3), weight=1)
+
         if(algorithm == "linea_DDA"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Linea por DDA", font=("helvetica", 20))
             titulo_inputs.grid(row=0, column=0, columnspan=4,  pady=20, sticky="EW")
-
+            
             x0 = customtkinter.CTkEntry(self, placeholder_text="X0")
             x0.grid(column=0, row=1, padx=(20,10), pady=(20,10), sticky="WE")
 
@@ -60,7 +60,8 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             y1 = customtkinter.CTkEntry(self, placeholder_text="Y1")
             y1.grid(column=3, row=1, padx=(10,20), pady=(20,10), sticky="WE")
 
-            graph = customtkinter.CTkButton(self, text="Graficar", command= lambda: parentFrame.plot(self.get_coordinates([x0,y0,x1,y1])))
+            entries = [x0,y0,x1,y1] 
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
 
         elif(algorithm == "linea_bresenham"):
@@ -79,39 +80,42 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             y1 = customtkinter.CTkEntry(self, placeholder_text="Y1")
             y1.grid(column=3, row=1, padx=(10,20), pady=(20,10), sticky="WE")
 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            entries = [x0,y0,x1,y1] 
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
 
         elif(algorithm == "circulo_DDA"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Circulo por DDA", font=("helvetica", 20))
             titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
 
-            radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
-            radio.grid(column=0, row=1, padx=20, pady=(20,10), sticky="WE")
-
             Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
             Xc.grid(column=1, row=1, padx=10, pady=(20,10), sticky="WE")
             
             Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
             Yc.grid(column=2, row=1, padx=10, pady=(20,10), sticky="WE")
 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
+            radio.grid(column=0, row=1, padx=20, pady=(20,10), sticky="WE")
+
+            entries = [Xc,Yc,radio] 
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=15, pady=(10,25), columnspan=3, sticky="WE")
 
         elif(algorithm == "circulo_punto_medio"):
             titulo_inputs = customtkinter.CTkLabel(self, text="Circulo por punto medio", font=("helvetica", 20))
             titulo_inputs.grid(row=0, column=0, columnspan=3, pady=20, sticky="WE")
 
-            radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
-            radio.grid(column=0, row=1, padx=20, pady=(20,10), sticky="WE")
-
             Xc = customtkinter.CTkEntry(self, placeholder_text="X Central")
             Xc.grid(column=1, row=1, padx=10, pady=(20,10), sticky="WE")
             
             Yc = customtkinter.CTkEntry(self, placeholder_text="Y Central")
             Yc.grid(column=2, row=1, padx=10, pady=(20,10), sticky="WE")
 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            radio = customtkinter.CTkEntry(self, placeholder_text="Radio")
+            radio.grid(column=0, row=1, padx=20, pady=(20,10), sticky="WE")
+
+            entries = [Xc,Yc,radio] 
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=15, pady=(10,25), columnspan=3, sticky="WE")
 
         elif(algorithm == "elipse_punto_medio"):
@@ -130,7 +134,8 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             Ry = customtkinter.CTkEntry(self, placeholder_text="Radio Y")
             Ry.grid(column=3, row=1, padx=10, pady=(20,10), sticky="WE")
 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            entries = [Xc,Yc, Rx, Ry] 
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
 
         elif(algorithm == "parabola"):
@@ -149,12 +154,25 @@ class AlgorithmFrame(customtkinter.CTkFrame):
             y1 = customtkinter.CTkEntry(self, placeholder_text="Y1")
             y1.grid(column=3, row=1, padx=(10,20), pady=(20,10), sticky="WE")
 
-            graph = customtkinter.CTkButton(self, text="Graficar", command=self.destroy)
+            entries = [x0,y0,x1,y1] 
+            graph = customtkinter.CTkButton(self, text="Graficar", command=lambda: parentFrame.plot(self.get_coordinates(algorithm, entries)))
             graph.grid(column=0, row=2, padx=20, pady=(10,25), columnspan=4, sticky="WE")
             
-    def get_coordinates(self, entries):
+    def get_coordinates(self, opc, entries):
         algorithm = Algorithm()
         e1 = [int(value.get()) for value in entries]
-        coordinates = algorithm.lineDDA(e1[0], e1[1], e1[2], e1[3])
+        if opc == "linea_DDA":
+            coordinates = algorithm.lineDDA(e1[0], e1[1], e1[2], e1[3])
+        elif opc == "linea_bresenham":
+            coordinates = algorithm.lineBresenham(e1[0], e1[1], e1[2], e1[3])
+        elif opc == "circulo_DDA":
+            coordinates = algorithm.circleDDA(e1[0], e1[1], e1[2])
+        elif opc == "circulo_punto_medio":
+            coordinates = algorithm.circleMidPoint(e1[0], e1[1], e1[2])
+        elif opc == "elipse_punto_medio":
+            coordinates = algorithm.ellipseMidPoint(e1[0], e1[1], e1[2], e1[3])
+        elif opc == "parabola":
+            coordinates = algorithm.parabola(e1[0], e1[1], e1[2], e1[3])
+
         return coordinates
         

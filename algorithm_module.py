@@ -31,7 +31,7 @@ class Algorithm():
         return points
 
     # Función para dibujar una línea usando el algoritmo de Bresenham
-    def lineBresenham(x0, y0, x1, y1):
+    def lineBresenham(self, x0, y0, x1, y1):
         points = [] # Lista para almacenar los puntos de la línea
         dx = abs(x1 - x0) # Diferencia absoluta en x
         dy = abs(y1 - y0) # Diferencia absoluta en y
@@ -59,7 +59,7 @@ class Algorithm():
         return points
 
     # Función para dibujar un círculo usando el algoritmo DDA
-    def circleDDA(xc, yc, r):
+    def circleDDA(self, xc, yc, r):
         points = [] # Lista para almacenar los puntos del círculo
         X = r
         Y = 0
@@ -94,7 +94,7 @@ class Algorithm():
         return points
 
     # Función para dibujar un círculo usando el algoritmo de punto medio
-    def circleMidPoint(xc, yc, r):
+    def circleMidPoint(self, xc, yc, r):
         points = [] # Lista para almacenar los puntos del círculo
         x = 0
         y = r
@@ -132,7 +132,7 @@ class Algorithm():
         return points
 
     # Función para dibujar una elipse usando el algoritmo de punto medio
-    def ellipseMidPoint(xc, yc, rx, ry):
+    def ellipseMidPoint(self, xc, yc, rx, ry):
         points = [] # Lista para almacenar los puntos de la elipse
         x = 0
         y = ry
@@ -181,7 +181,7 @@ class Algorithm():
         return points
 
     # Calcular coordenadas parabola
-    def parabola(x0, y0, x1, y1):
+    def parabola(self, x0, y0, x1, y1):
         points = [] # Lista para almacenar los puntos de la parábola
         dx = x1 - x0 # Diferencia en x
         dy = y1 - y0 # Diferencia en y
