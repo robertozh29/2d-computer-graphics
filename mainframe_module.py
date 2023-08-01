@@ -69,10 +69,16 @@ class MainFrame(customtkinter.CTkFrame):
         if self.plot1 and coordinates != [(96,96)]: 
             for widget in self.frame_logs.winfo_children():
                 widget.destroy()
+
+            l = customtkinter.CTkLabel(self.frame_logs, text = "|    X    |    Y    |")
+            l.grid() 
             for idx,n in enumerate(coordinates):
-                log = f"{idx}: {n}" 
+                if n[0] > 9 or n[1] > 9: 
+                    log = f"(   {n[0]}   ,   {n[1]}   )" 
+                else: 
+                    log = f"(    {n[0]}    ,    {n[1]}    )" 
                 l = customtkinter.CTkLabel(self.frame_logs, text = log)
-                l.grid()   
+                l.grid() 
 
         self.plot1 = True
 
