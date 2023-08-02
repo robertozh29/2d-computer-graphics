@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import customtkinter
 from algorithm_module import Algorithm
 from matplotlib.figure import Figure
@@ -22,14 +23,36 @@ class MainFrame(customtkinter.CTkFrame):
         self.frame_logs = customtkinter.CTkScrollableFrame(self, width=300, height=300)
         self.frame_logs.grid(column=1, row=1, sticky="NSEW", padx=2, pady=2)
         self.frame_logs.grid_columnconfigure(0, weight=1)
+        self.frame_logs.grid_rowconfigure(0, weight=1)
 
         #incializando Widgets Grafica
         chart_width = self.winfo_screenwidth()
-        print(chart_width)
         self.figura = Figure(figsize = (10, 10), dpi = 100)
         self.axes = self.figura.add_subplot(111)
         self.canvas = FigureCanvasTkAgg(self.figura, master=self.frame_chart)
         self.plot()  
+
+    def show_quadrant_table(self, quadrant_values, quadrant_num):
+        print(quadrant_values)
+        # Styles para la tabla
+        style = ttk.Style(self)
+        style.configure("Treeview", background="#333", foreground="white", font=("helvetica", 18), rowheight=100)
+        style.configure("Treeview.Heading", font=("helvetica", 20), rowheight=40)
+
+        # Crear y configurar la tabla de cuadrantes
+        table = ttk.Treeview(self.frame_logs, columns=("x", "y"), show="headings", selectmode="none")
+        table.column("x", width=100, anchor="center")
+        table.column("y", width=80, anchor="center")
+        table.heading("x", text="Valores de X", anchor="center")
+        table.heading("y", text="Valores de Y", anchor="center")
+
+        # Insertar los valores de X e Y en la tabla
+        for i, quadrant in enumerate(quadrant_values):
+            table.insert("", "end", values=(quadrant[0], quadrant[1]))
+
+        # Mostrar la tabla en el marco especificado
+        table.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+
 
     def plot(self, coordinates = [(96,96)]):
         self.figura.set_facecolor('#333')
@@ -42,22 +65,26 @@ class MainFrame(customtkinter.CTkFrame):
 
 
         if self.plot1 and coordinates != [(96,96)]: 
-            for widget in self.frame_logs.winfo_children():
-                widget.destroy()
+            # for widget in self.frame_logs.winfo_children():
+            #     widget.destroy()
 
-            l = customtkinter.CTkLabel(self.frame_logs, text = "|    X    |    Y    |")
-            l.grid() 
-            for idx,n in enumerate(coordinates):
-                if n[0] > 9 or n[1] > 9: 
-                    log = f"(   {n[0]}   ,   {n[1]}   )" 
-                else: 
-                    log = f"(    {n[0]}    ,    {n[1]}    )" 
-                l = customtkinter.CTkLabel(self.frame_logs, text = log)
-                l.grid()   
+            # l = customtkinter.CTkLabel(self.frame_logs, text = "|    X    |    Y    |")
+            # l.grid() 
+            # for idx,n in enumerate(coordinates):
+            #     if n[0] > 9 or n[1] > 9: 
+            #         log = f"(   {n[0]}   ,   {n[1]}   )" 
+            #     else: 
+            #         log = f"(    {n[0]}    ,    {n[1]}    )" 
+            #     l = customtkinter.CTkLabel(self.frame_logs, text = log)
+            #     l.grid()   
+
+            self.show_quadrant_table(coordinates, 1)
 
         self.plot1 = True
 
-    def plot_circle(self, coordinates = [(96,96)]):
+    def plot_circle(self, lista_circulo = [(96,96)]):
+        coordinates, octantes = lista_circulo
+        print(octantes)
         self.figura.set_facecolor('#333')
         self.axes .set_facecolor("#212121")
         self.axes .tick_params(axis='both', colors='white')
@@ -69,14 +96,21 @@ class MainFrame(customtkinter.CTkFrame):
         if self.plot1 and coordinates != [(96,96)]: 
             for widget in self.frame_logs.winfo_children():
                 widget.destroy()
-
-            l = customtkinter.CTkLabel(self.frame_logs, text = "|    X    |    Y    |")
-            l.grid() 
+            i = 0
             for idx,n in enumerate(coordinates):
+                print(i)
+                if(idx == 0 or i == octantes):
+                    o = customtkinter.CTkLabel(self.frame_logs, text = "|      Octante      |")
+                    o.grid(pady=(15,0)) 
+                    x = customtkinter.CTkLabel(self.frame_logs, text = "|    X    |    Y    |")
+                    x.grid() 
+                    i = 0
                 if n[0] > 9 or n[1] > 9: 
                     log = f"(   {n[0]}   ,   {n[1]}   )" 
                 else: 
                     log = f"(    {n[0]}    ,    {n[1]}    )" 
+
+                i= i + 1
                 l = customtkinter.CTkLabel(self.frame_logs, text = log)
                 l.grid() 
 
@@ -210,7 +244,7 @@ class AlgorithmFrame(customtkinter.CTkFrame):
         elif opc == "linea_bresenham":
             coordinates = algorithm.lineBresenham(e1[0], e1[1], e1[2], e1[3])
         elif opc == "circulo_DDA":
-            coordinates = algorithm.circleDDA(e1[0], e1[1], e1[2])
+            coordinates = algorithm.circleDDA2(e1[0], e1[1], e1[2])
         elif opc == "circulo_punto_medio":
             coordinates = algorithm.circleMidPoint(e1[0], e1[1], e1[2])
         elif opc == "elipse_punto_medio":

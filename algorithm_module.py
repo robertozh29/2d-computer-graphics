@@ -58,6 +58,42 @@ class Algorithm():
 
         return points
 
+    def circleDDA2(self, xc, yc, r):
+        points = [] # Lista para almacenar los puntos del círculo
+        X = r
+        Y = 0
+
+        # Agregar puntos iniciales en los ejes
+        points.append((xc + X, yc + Y))
+        points.append((xc - X, yc - Y))
+        points.append((xc + Y, yc + X))
+        points.append((xc - Y, yc + X))
+
+        P = 1 - r # Parámetro inicial
+
+        octantes = 0
+        # Loop para calcular los puntos del círculo en el primer octante
+        while X > Y:
+            octantes = octantes + 1
+            Y += 1
+            if P <= 0:
+                P = P + 2 * Y + 1
+            else:
+                X -= 1
+                P = P + 2 * Y - 2 * X + 1
+
+            # Agregar puntos en todos los octantes
+            points.append((xc + X, yc + Y))
+            points.append((xc - X, yc + Y))
+            points.append((xc + X, yc - Y))
+            points.append((xc - X, yc - Y))
+            points.append((xc + Y, yc + X))
+            points.append((xc - Y, yc + X))
+            points.append((xc + Y, yc - X))
+            points.append((xc - Y, yc - X))
+        print(octantes)
+        return points, octantes
+
     # Función para dibujar un círculo usando el algoritmo DDA
     def circleDDA(self, xc, yc, r):
         points = [] # Lista para almacenar los puntos del círculo
